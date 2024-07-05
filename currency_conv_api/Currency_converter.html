@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API</title>
+    <script>
+//accessing api using api key
+    document.addEventListener("DOMContentLoaded",()=>{
+      var myHeaders = new Headers();
+myHeaders.append("apikey", "iV45NHXrsS2r7AkIi5URcy7OQ4vKcFad");
+
+var requestOptions = {
+  method: 'GET',
+  redirect: 'follow',
+  headers: myHeaders
+};
+/*
+var requestOptions = {
+  method: 'GET',
+  redirect: 'follow',
+  //directly include on header
+  headers: {
+    "apikey": "iV45NHXrsS2r7AkIi5URcy7OQ4vKcFad"
+  }
+};
+*/
+document.querySelector("form").onsubmit = () =>{
+
+  fetch("https://api.apilayer.com/exchangerates_data/latest?&base=USD", requestOptions)
+  //.then(response => response.text()) don't use text() we can't able to access the requested JSON data 
+    .then(response => response.json())
+    // .then(result => console.log(result))
+    .then(data => {
+      const currency = document.querySelector("#currency").value;
+      // NOTE this part you can't access like properties data.rates.currency
+      const rate = data.rates[currency];
+      // console.log(rate);
+    document.querySelector("h1").innerHTML = `1 USD is eqaul to ₹ ${rate}`;
+  // var log = document.querySelector("h1").innerText;
+  // console.log(log);
+
+  
+    } )
+    .catch(error => console.log('error', error));
+
+    // return false !important otherwise it try submit somewhere else
+    return false;
+}
+    });
+
+    </script>
+</head>
+<body>
+  <form action="">
+   <input type="text" id="currency">
+    <input type="submit" value="submit">
+  </form>
+  <div>
+   <h1></h1>
+  </div>
+</body>
+</html>
